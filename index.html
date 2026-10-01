@@ -27,34 +27,59 @@
             box-sizing: border-box;
         }
 
+        html,
         body {
+            width: 100%;
+            height: 100%;
+            min-height: 100%;
             margin: 0;
             padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            position: fixed;
+            inset: 0;
             font-family: 'Poppins', sans-serif;
             color: #2B0A0F;
-            overflow: hidden;
             background: linear-gradient(rgba(255, 244, 220, 0.86), rgba(155, 27, 48, 0.76)),
                 url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+            overscroll-behavior: none;
         }
 
         #slider-container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            overflow: hidden;
+            isolation: isolate;
+            touch-action: pan-y;
         }
 
         .page-slide {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px 20px 80px 20px;
+            gap: 10px;
+            padding: max(20px, env(safe-area-inset-top)) 20px calc(90px + env(safe-area-inset-bottom)) 20px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
             transition: transform 0.8s cubic-bezier(0.64, 0.04, 0.35, 1);
+        }
+
+        .page-slide::-webkit-scrollbar {
+            display: none;
         }
 
         h1,
@@ -182,6 +207,7 @@
             border-radius: 5px;
             clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
             z-index: 5;
+            pointer-events: none;
         }
 
         .heart-seal {
@@ -190,7 +216,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 3.5rem;
-            z-index: 6;
+            z-index: 8;
             transition: opacity 0.3s;
             filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
         }
@@ -204,11 +230,12 @@
             background: #FFF8E8;
             border-radius: 10px;
             border: 2px solid #C9A66B;
-            z-index: 3;
+            z-index: 7;
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding-top: 15px;
+            padding: 12px 8px;
+            overflow: visible;
             transition: transform 0.8s ease 0.3s, height 0.8s ease 0.3s;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
@@ -291,6 +318,9 @@
         }
 
         .keypad-btn {
+            position: relative;
+            z-index: 9;
+            touch-action: manipulation;
             padding: 7px;
             font-size: 1rem;
             font-weight: bold;
@@ -324,17 +354,24 @@
         .reaction-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            height: 100dvh;
+            padding: 20px;
+            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.58);
             justify-content: center;
             align-items: center;
-            z-index: 10000;
+            z-index: 2147483647;
+            isolation: isolate;
         }
 
         .reaction-popup {
+            width: min(320px, 100%);
+            max-height: calc(100% - 20px);
+            overflow-y: auto;
+            box-sizing: border-box;
             background: #FFF4DC;
             padding: 25px;
             border-radius: 20px;
@@ -984,6 +1021,11 @@
 
         /* RESPONSIF HP */
         @media (max-width: 600px) {
+            .page-slide {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
             .nav-btn {
                 width: 50px;
                 height: 50px;
@@ -1038,8 +1080,36 @@
             }
 
             .css-envelope {
-                width: 280px;
+                width: min(280px, calc(100vw - 44px));
                 height: 180px;
+            }
+
+            .surat-wrapper {
+                margin-top: 24px;
+                flex-shrink: 0;
+            }
+
+            .surat-wrapper.opened .css-envelope {
+                transform: scale(1) translateY(36px);
+            }
+
+            .surat-wrapper.opened .envelope-paper {
+                transform: translateY(-165px);
+                height: 350px;
+            }
+
+            .keypad-btn {
+                min-width: 42px;
+                min-height: 42px;
+                padding: 5px;
+            }
+
+            .keypad-grid {
+                gap: 5px;
+            }
+
+            #input-sandi-container {
+                width: 100%;
             }
 
             .surat-wrapper.opened .envelope-paper {
@@ -1385,6 +1455,9 @@
         const btnBackMenu = document.getElementById('back-menu-btn');
 
         function goToSlide(index) {
+            // Batasi index agar navigasi selalu berada pada halaman yang tersedia.
+            index = Math.max(0, Math.min(index, 2));
+
             // Jika sedang membuka kenangan, tutup dahulu.
             if (activeMemory !== null) {
                 closeMemory(false);
@@ -1393,19 +1466,26 @@
             currentPage = index;
 
             slides.forEach((slide, i) => {
-                // Halaman kenangan tidak ikut slider utama.
+                // Halaman detail hanya dapat dibuka melalui kartu menu kenangan.
                 if (slide.classList.contains('memory-page')) {
                     slide.classList.remove('memory-open');
                     slide.style.transformOrigin = '50% 50%';
+                    slide.setAttribute('aria-hidden', 'true');
                     return;
                 }
 
-                if (i === index) {
+                const active = i === index;
+                slide.classList.toggle('is-active', active);
+                slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+                slide.style.pointerEvents = active ? 'auto' : 'none';
+
+                if (active) {
                     slide.style.transform = 'translateX(0)';
+                    slide.scrollTop = 0;
                 } else if (i < index) {
-                    slide.style.transform = 'translateX(-100vw)';
+                    slide.style.transform = 'translateX(-100%)';
                 } else {
-                    slide.style.transform = 'translateX(100vw)';
+                    slide.style.transform = 'translateX(100%)';
                 }
             });
 
@@ -1434,6 +1514,7 @@
             target.style.transformOrigin = `${centerX}px ${centerY}px`;
 
             // Buka halaman dari kartu yang diklik.
+            target.setAttribute('aria-hidden', 'false');
             target.classList.add('memory-open');
 
             // Beri penekanan pada kartu sumber.
@@ -1467,6 +1548,7 @@
                 }
 
                 target.classList.remove('memory-open');
+                target.setAttribute('aria-hidden', 'true');
 
                 setTimeout(() => {
                     target.style.transformOrigin = '50% 50%';
