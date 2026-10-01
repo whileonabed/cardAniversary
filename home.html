@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 3rd Anniversary Sayang!</title>
+
+    <!-- Font Romantis -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lora:ital,wght@0,400;1,400&family=Poppins:wght@300;400;600&family=Indie+Flower&display=swap"
+        rel="stylesheet">
+
+    <!-- Library untuk Screenshot Sticky Note -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        /* === PALET WARNA ROSE ELEGAN ===
+           Merah mawar : #9B1B30
+           Merah gelap : #5A111B
+           Cream       : #FFF4DC
+           Gold        : #D8A34D
+           Hitam       : #241417
+        */
+        /* PENGATURAN UMUM */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            color: #2B0A0F;
+            overflow: hidden;
+            background: linear-gradient(rgba(255, 244, 220, 0.86), rgba(155, 27, 48, 0.76)),
+                url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+        }
+
+        #slider-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .page-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 20px 80px 20px;
+            transition: transform 0.8s cubic-bezier(0.64, 0.04, 0.35, 1);
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Dancing Script', cursive;
+            text-align: center;
+            text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.9);
+        }
+
+        .section-title {
+            font-size: 3rem;
+            color: #9B1B30;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #9B1B30;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 0 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        /* === TOMBOL KEMBALI KE MENU === */
+        .nav-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+
+            width: 55px;
+            height: 55px;
+
+            background-color: #FFF4DC;
+            color: #5A111B;
+
+            border: 2px solid #9B1B30;
+            border-radius: 50%;
+
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1;
+
+            cursor: pointer;
+            z-index: 9000;
+
+            box-shadow: 0 5px 15px rgba(155, 27, 48, 0.22);
+
+            transition: 0.3s;
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .nav-btn:hover {
+            background-color: #9B1B30;
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(155, 27, 48, 0.38);
+        }
+
+        /* --- HALAMAN AWAL & AMPLOP SURAT --- */
+        #home-slide h1 {
+            font-size: 4.5rem;
+            color: #9B1B30;
+            margin-bottom: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        #home-slide p {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #5A111B;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+
+        .surat-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            cursor: pointer;
+        }
+
+        .css-envelope {
+            position: relative;
+            width: 320px;
+            height: 200px;
+            background-color: #dca57a;
+            border-radius: 5px;
+            box-shadow: 0 15px 25px rgba(155, 27, 48, 0.28);
+            animation: float 3s ease-in-out infinite;
+            transition: transform 0.4s ease;
+        }
+
+        .surat-wrapper:hover .css-envelope {
+            transform: scale(1.03);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #E8CFA3;
+            clip-path: polygon(0 0, 100% 0, 50% 55%);
+            transform-origin: top;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 4;
+        }
+
+        .envelope-pocket {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #F4E3BF;
+            border-radius: 5px;
+            clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+            z-index: 5;
+        }
+
+        .heart-seal {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.5rem;
+            z-index: 6;
+            transition: opacity 0.3s;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+        }
+
+        .envelope-paper {
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            background: #FFF8E8;
+            border-radius: 10px;
+            border: 2px solid #C9A66B;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 15px;
+            transition: transform 0.8s ease 0.3s, height 0.8s ease 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .surat-wrapper.opened .css-envelope {
+            animation: none;
+            cursor: default;
+            transform: scale(1.05) translateY(50px);
+        }
+
+        .surat-wrapper.opened .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        .surat-wrapper.opened .heart-seal {
+            opacity: 0;
+        }
+
+        .surat-wrapper.opened .envelope-paper {
+            transform: translateY(-210px);
+            height: 380px;
+            z-index: 4;
+        }
+
+        .petunjuk-klik {
+            font-size: 1rem;
+            color: #9B1B30;
+            font-weight: bold;
+            margin-top: 25px;
+            background: #F0D18A;
+            padding: 5px 20px;
+            border-radius: 20px;
+            animation: pulse 2s infinite;
+            z-index: 5;
+            box-shadow: 0 4px 10px rgba(155, 27, 48, 0.22);
+        }
+
+        /* --- KONTEN KEYPAD --- */
+        #input-sandi-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease 1s;
+        }
+
+        .surat-wrapper.opened #input-sandi-container {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #input-sandi-container p {
+            margin: 0 0 5px 0;
+            font-size: 0.85rem;
+            color: #5A111B;
+            font-weight: bold;
+        }
+
+        .passcode-display {
+            font-size: 1.4rem;
+            letter-spacing: 5px;
+            color: #9B1B30;
+            font-weight: bold;
+            min-height: 32px;
+            margin-bottom: 6px;
+            background: #fff;
+            padding: 2px 10px;
+            border-radius: 6px;
+            border: 2px solid #D8A34D;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+        }
+
+        .keypad-btn {
+            padding: 7px;
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff;
+            color: #9B1B30;
+            border: 1.5px solid #D8A34D;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .keypad-btn:hover {
+            background-color: #D8A34D;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .keypad-btn.btn-action {
+            background-color: #9B1B30;
+            color: white;
+            border-color: #9B1B30;
+        }
+
+        .keypad-btn.btn-action:hover {
+            background-color: #5A111B;
+        }
+
+        /* --- MODAL POP-UP REAKSI GAMBAR --- */
+        .reaction-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .reaction-popup {
+            background: #FFF4DC;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 320px;
+            border: 4px dashed #D8A34D;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .reaction-popup img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(155, 27, 48, 0.28);
+            margin-bottom: 15px;
+        }
+
+        .reaction-popup p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* --- MENU PILIHAN LAGU DENGAN ALBUM COVER --- */
+        .music-menu {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 650px;
+            z-index: 10;
+        }
+
+        .music-card {
+            background: #FFF4DC;
+            border: 2px solid #D8A34D;
+            padding: 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(155, 27, 48, 0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 170px;
+        }
+
+        .music-card:hover {
+            background: #D8A34D;
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(217, 4, 41, 0.25);
+        }
+
+        .music-card:hover .song-title,
+        .music-card:hover .song-artist {
+            color: white;
+        }
+
+        .album-cover {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            border: 2px solid #fff;
+        }
+
+        .song-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            color: #9B1B30;
+            font-weight: bold;
+            text-align: center;
+            margin: 0;
+            transition: 0.3s;
+        }
+
+        .song-artist {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem;
+            color: #5A111B;
+            text-align: center;
+            margin: 0;
+            transition: 0.3s;
+            margin-top: 2px;
+        }
+
+        /* --- DASHBOARD 4 MENU UTAMA --- */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 500px;
+            width: 90%;
+            z-index: 10;
+        }
+
+        .menu-item {
+            background: #FFF4DC;
+            border: 3px dashed #D8A34D;
+            border-radius: 15px;
+            padding: 30px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(217, 4, 41, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: #D8A34D;
+            border-color: white;
+            box-shadow: 0 10px 25px rgba(155, 27, 48, 0.28);
+        }
+
+        .menu-item:hover p {
+            color: white;
+        }
+
+        .menu-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            transition: 0.3s;
+            filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .menu-item:hover .menu-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* --- MENU KENANGAN BERBASIS GAMBAR --- */
+        .image-menu-item {
+            position: relative;
+            padding: 0;
+            overflow: hidden;
+            aspect-ratio: 1 / 1;
+            min-height: 0;
+            border: 3px solid #D8A34D;
+            border-radius: 18px;
+            background: #FFF4DC;
+            box-shadow: 0 8px 20px rgba(155, 27, 48, 0.20);
+        }
+
+        .image-menu-item img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.45s ease, filter 0.45s ease;
+        }
+
+        .image-menu-item::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top,
+                    rgba(36, 20, 23, 0.52),
+                    rgba(155, 27, 48, 0.04) 55%,
+                    rgba(255, 244, 220, 0.03));
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+
+        .image-menu-item:hover {
+            transform: translateY(-6px) scale(1.035);
+            border-color: #FFF4DC;
+            box-shadow: 0 14px 30px rgba(155, 27, 48, 0.35);
+        }
+
+        .image-menu-item:hover img {
+            transform: scale(1.08);
+            filter: saturate(1.08);
+        }
+
+        .image-menu-item:hover::after {
+            opacity: 0.72;
+        }
+
+        /* Menjaga kartu tetap bagus saat animasi menu disembunyikan */
+        #slide-2.memory-menu-hidden .image-menu-item {
+            pointer-events: none;
+        }
+
+        .menu-item p {
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;
+            color: #9B1B30;
+            margin: 0;
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+
+        /* --- ANIMASI KELUAR DARI MENU KENANGAN --- */
+        .memory-page {
+            z-index: 50;
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.08);
+            transform-origin: 50% 50%;
+
+            /* Background solid agar menu di belakang tidak terlihat */
+            background:
+                linear-gradient(rgba(255, 244, 220, 0.98), rgba(155, 27, 48, 0.94)),
+                url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+
+            /* Pastikan panel benar-benar menutup layer di bawahnya */
+            isolation: isolate;
+            overflow: hidden;
+
+            transition:
+                transform 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.35s ease,
+                visibility 0s linear 0.72s;
+        }
+
+        .memory-page.memory-open {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+            transition:
+                transform 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.3s ease;
+        }
+
+        /* Panel isi selalu berada di atas background halaman */
+        .memory-page::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 244, 220, 0.97);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .memory-page.memory-open .section-title,
+        .memory-page.memory-open .photobooth-container,
+        .memory-page.memory-open .polaroid-container,
+        .memory-page.memory-open .kapsul-container,
+        .memory-page.memory-open .love-letter-box {
+            animation: memoryContentIn 0.65s ease 0.12s both;
+        }
+
+        @keyframes memoryContentIn {
+            0% {
+                opacity: 0;
+                transform: translateY(18px) scale(0.96);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        #slide-2.memory-menu-hidden .menu-item {
+            opacity: 0;
+            transform: scale(0.92);
+            pointer-events: none;
+        }
+
+        #slide-2.memory-menu-hidden .memory-selected {
+            opacity: 0;
+        }
+
+        @media (max-width: 600px) {
+            .memory-page {
+                transform: scale(0.12);
+            }
+        }
+
+        /* --- DESAIN KONTEN KEDALAMAN (PHOTOBOOTH DLL) --- */
+        .photobooth-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            max-width: 900px;
+        }
+
+        .photobooth {
+            background: #FFF4DC;
+            border: 1px solid #ccc;
+            padding: 12px 12px 35px 12px;
+            box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.2);
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        .photobooth:nth-child(1) {
+            transform: rotate(-4deg);
+        }
+
+        .photobooth:nth-child(2) {
+            transform: translateY(-15px) rotate(2deg);
+        }
+
+        .photobooth:nth-child(3) {
+            transform: rotate(-2deg);
+        }
+
+        .photobooth:hover {
+            transform: scale(1.1) rotate(0deg) !important;
+            z-index: 10;
+            box-shadow: 0 10px 25px rgba(155, 27, 48, 0.38);
+        }
+
+        .photobooth img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            filter: sepia(40%) contrast(1.1);
+        }
+
+        .photobooth .caption {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            text-align: center;
+            color: #5A111B;
+            margin-top: 5px;
+        }
+
+        .polaroid-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            max-width: 800px;
+        }
+
+        .polaroid {
+            background: #FFF4DC;
+            border: 1px solid #ccc;
+            padding: 10px 10px 35px 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 160px;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        .polaroid:nth-child(1) {
+            transform: rotate(-6deg);
+        }
+
+        .polaroid:nth-child(2) {
+            transform: rotate(4deg);
+        }
+
+        .polaroid:nth-child(3) {
+            transform: rotate(-3deg);
+        }
+
+        .polaroid:nth-child(4) {
+            transform: rotate(5deg);
+        }
+
+        .polaroid:hover {
+            transform: scale(1.1) rotate(0deg) !important;
+            z-index: 10;
+            box-shadow: 0 10px 25px rgba(155, 27, 48, 0.38);
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+
+        .polaroid p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-top: 10px;
+            color: #5A111B;
+        }
+
+        /* --- FITUR STICKY NOTES KAPSUL WAKTU --- */
+        .kapsul-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .capsule-box {
+            background: #FFF4DC;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            border: 3px dashed #D8A34D;
+            z-index: 2;
+            transition: 0.3s;
+        }
+
+        .capsule-box h3 {
+            color: #9B1B30;
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .capsule-box p {
+            font-size: 1rem;
+            color: #5A111B;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .capsule-textarea {
+            width: 100%;
+            height: 120px;
+            padding: 15px;
+            border: 2px solid #D8A34D;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            resize: none;
+            outline: none;
+            background: #FFF8EA;
+            transition: 0.3s;
+        }
+
+        .capsule-textarea:focus {
+            border-color: #9B1B30;
+            box-shadow: 0 0 10px rgba(155, 27, 48, 0.22);
+        }
+
+        .btn-tempel {
+            margin-top: 20px;
+            background-color: #9B1B30;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(155, 27, 48, 0.28);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-tempel:hover {
+            background-color: #5A111B;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(155, 27, 48, 0.38);
+        }
+
+        .hasil-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .sticky-note-result {
+            background: #F4D66D;
+            width: 280px;
+            min-height: 250px;
+            padding: 30px 20px 20px 20px;
+            box-shadow: 5px 10px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: tempelKertas 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: rotate(3deg);
+            z-index: 5;
+            border-bottom-right-radius: 30px 5px;
+        }
+
+        .sticky-note-result::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            width: 100px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-radius: 2px;
+            border-left: 2px dashed rgba(0, 0, 0, 0.1);
+            border-right: 2px dashed rgba(0, 0, 0, 0.1);
+        }
+
+        .sticky-note-result p {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.4rem;
+            color: #241417;
+            line-height: 1.5;
+            text-align: left;
+            margin: 0;
+            word-wrap: break-word;
+        }
+
+        .sticky-signature {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.2rem;
+            color: #9B1B30;
+            text-align: right;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .btn-download {
+            background-color: #FFF4DC;
+            color: #9B1B30;
+            border: 2px solid #9B1B30;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 10px rgba(217, 4, 41, 0.15);
+            animation: fadeIn 1s ease 0.5s both;
+        }
+
+        .btn-download:hover {
+            background-color: #D8A34D;
+            color: white;
+            border-color: #D8A34D;
+            transform: translateY(-2px);
+        }
+
+        .love-letter-box {
+            background: #FFF4DC;
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 600px;
+            border-left: 8px solid #9B1B30;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .love-letter-box h3 {
+            text-align: left;
+            margin-top: 0;
+            font-size: 2.5rem;
+            color: #9B1B30;
+        }
+
+        @keyframes tempelKertas {
+            0% {
+                transform: scale(2) rotate(15deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) rotate(3deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.03);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            50% {
+                transform: translateX(10px);
+            }
+
+            75% {
+                transform: translateX(-10px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        /* RESPONSIF HP */
+        @media (max-width: 600px) {
+            .nav-btn {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+                margin-bottom: 15px;
+            }
+
+            .menu-grid {
+                gap: 15px;
+            }
+
+            .menu-item {
+                padding: 20px 10px;
+            }
+
+            .image-menu-item {
+                padding: 0;
+                border-width: 2px;
+                border-radius: 14px;
+            }
+
+            .image-menu-item img {
+                min-height: 0;
+            }
+
+            .menu-icon {
+                font-size: 2.8rem;
+                margin-bottom: 10px;
+            }
+
+            .menu-item p {
+                font-size: 0.95rem;
+            }
+
+            .photobooth {
+                width: 30vw;
+                padding: 6px 6px 20px 6px;
+            }
+
+            .photobooth img {
+                height: 15vw;
+            }
+
+            .photobooth .caption {
+                font-size: 1rem;
+            }
+
+            .css-envelope {
+                width: 280px;
+                height: 180px;
+            }
+
+            .surat-wrapper.opened .envelope-paper {
+                transform: translateY(-180px);
+                height: 350px;
+            }
+
+            .music-card {
+                width: 42vw;
+                max-width: 140px;
+                padding: 10px;
+            }
+
+            .album-cover {
+                width: 100px;
+                height: 100px;
+            }
+
+            .capsule-box {
+                padding: 20px;
+            }
+
+            .capsule-textarea {
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <audio id="bg-music" loop></audio>
+
+    <!-- Tombol Universal Kembali ke Menu (Hanya muncul di dalam konten) -->
+    <button id="back-menu-btn" class="nav-btn" onclick="closeMemory()" aria-label="Kembali ke Menu Pilihan">←</button>
+
+    <div id="slider-container">
+
+        <!-- HALAMAN 0: AWAL (KUNCI SURAT) -->
+        <div class="page-slide" id="slide-0">
+            <h1>Happy 3rd Anniversary!</h1>
+            <p>"Tiga tahun berlalu, dan aku masih jatuh cinta padamu setiap hari..."</p>
+
+            <div class="surat-wrapper" id="surat-wrapper" onclick="bukaSurat()">
+                <div class="css-envelope">
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-paper">
+                        <div id="input-sandi-container">
+                            <p>Masukkan Sandi 🔐</p>
+                            <div class="passcode-display" id="layar-sandi">_ _ _ _ _ _</div>
+                            <div class="keypad-grid">
+                                <button class="keypad-btn" onclick="tekanAngka(1)">1</button>
+                                <button class="keypad-btn" onclick="tekanAngka(2)">2</button>
+                                <button class="keypad-btn" onclick="tekanAngka(3)">3</button>
+                                <button class="keypad-btn" onclick="tekanAngka(4)">4</button>
+                                <button class="keypad-btn" onclick="tekanAngka(5)">5</button>
+                                <button class="keypad-btn" onclick="tekanAngka(6)">6</button>
+                                <button class="keypad-btn" onclick="tekanAngka(7)">7</button>
+                                <button class="keypad-btn" onclick="tekanAngka(8)">8</button>
+                                <button class="keypad-btn" onclick="tekanAngka(9)">9</button>
+                                <button class="keypad-btn btn-action" onclick="hapusAngka()">C</button>
+                                <button class="keypad-btn" onclick="tekanAngka(0)">0</button>
+                                <button class="keypad-btn btn-action" onclick="cekSandi()">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="envelope-pocket"></div>
+                    <div class="heart-seal">❤️️</div>
+                </div>
+                <div class="petunjuk-klik" id="petunjuk-klik">Klik Hatiku! 👇</div>
+            </div>
+        </div>
+
+        <!-- HALAMAN 1: MENU PILIHAN LAGU -->
+        <div class="page-slide" id="slide-1">
+            <h2 class="section-title">Melodi Kisah Kita 🎶</h2>
+            <p
+                style="font-size: 1.05rem; color: #5A111B; font-weight: 500; text-align: center; margin-bottom: 25px; background: rgba(255, 255, 255, 0.75); padding: 15px 25px; border-radius: 20px; max-width: 650px; font-style: italic; line-height: 1.6; border: 2px dashed #D8A34D;">
+                "Ini adalah lagu-lagu favorit kita berdua. Setiap bait lirik dan nadanya selalu mengingatkanku pada
+                memori indah yang pernah kita lewati bersama.<br><br>Pilih satu lagunya untuk menemani langkahmu membaca
+                surat ini sampai akhir ya, Kesayanganku..."
+            </p>
+
+            <div class="music-menu">
+                <div class="music-card" onclick="pilihLagu('music/perfect.mp3')">
+                    <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=300&q=80"
+                        alt="Perfect" class="album-cover">
+                    <p class="song-title">Perfect</p>
+                    <p class="song-artist">Ed Sheeran</p>
+                </div>
+                <div class="music-card" onclick="pilihLagu('music/thousand-years.mp3')">
+                    <img src="pict/thousany.png" alt="A Thousand Years" class="album-cover">
+                    <p class="song-title">A Thousand Years</p>
+                    <p class="song-artist">Christina Perri</p>
+                </div>
+                <div class="music-card" onclick="pilihLagu('music/beautiful-in-white.mp3')">
+                    <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=300&q=80"
+                        alt="Beautiful In White" class="album-cover">
+                    <p class="song-title">Beautiful In White</p>
+                    <p class="song-artist">Westlife</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN 2: DASHBOARD 4 MENU KENANGAN -->
+        <div class="page-slide" id="slide-2">
+            <h2 class="section-title">Kenangan Kita 💫</h2>
+            <div class="menu-grid">
+                <!-- Menu 1: Awal Bertemu -->
+                <div class="menu-item image-menu-item" onclick="openMemory(3, this)">
+                    <img src="pict/awal-bertemu.png" alt="Awal Bertemu">
+                </div>
+
+                <!-- Menu 2: Kita Sekarang -->
+                <div class="menu-item image-menu-item" onclick="openMemory(4, this)">
+                    <img src="pict/kita-sekarang.png" alt="Kita Sekarang">
+                </div>
+
+                <!-- Menu 3: Kotak Harapan -->
+                <div class="menu-item image-menu-item" onclick="openMemory(5, this)">
+                    <img src="pict/kotak-harapan.png" alt="Kotak Harapan">
+                </div>
+
+                <!-- Menu 4: Pesan Rahasia -->
+                <div class="menu-item image-menu-item" onclick="openMemory(6, this)">
+                    <img src="pict/pesan-rahasia.png" alt="Pesan Rahasia">
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN 3 (SUB-MENU 1): PHOTOBOOTH -->
+        <div class="page-slide memory-page" id="slide-3">
+            <h2 class="section-title">Awal Kita Bertemu</h2>
+            <div class="photobooth-container">
+                <div class="photobooth">
+                    <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80"
+                        alt="Momen 1">
+                    <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=300&q=80"
+                        alt="Momen 2">
+                    <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=300&q=80"
+                        alt="Momen 3">
+                    <div class="caption">Malu-Malu</div>
+                </div>
+                <div class="photobooth">
+                    <img src="https://images.unsplash.com/photo-1513279922550-250c2129b13a?auto=format&fit=crop&w=300&q=80"
+                        alt="Momen 4">
+                    <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=300&q=80"
+                        alt="Momen 5">
+                    <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&w=300&q=80"
+                        alt="Momen 6">
+                    <div class="caption">Senyum Pertamamu</div>
+                </div>
+                <div class="photobooth">
+                    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=300&q=80"
+                        alt="Momen 7">
+                    <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80"
+                        alt="Momen 8">
+                    <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=300&q=80"
+                        alt="Momen 9">
+                    <div class="caption">Gemesin!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN 4 (SUB-MENU 2): POLAROID -->
+        <div class="page-slide memory-page" id="slide-4">
+            <h2 class="section-title">Kita yang Sekarang</h2>
+            <div class="polaroid-container">
+                <div class="polaroid">
+                    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=300&q=80"
+                        alt="Sekarang 1">
+                    <p>Makin Lengket ❤️</p>
+                </div>
+                <div class="polaroid">
+                    <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&w=300&q=80"
+                        alt="Sekarang 2">
+                    <p>Selalu Bersama</p>
+                </div>
+                <div class="polaroid">
+                    <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=300&q=80"
+                        alt="Sekarang 3">
+                    <p>Momen Seru</p>
+                </div>
+                <div class="polaroid">
+                    <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80"
+                        alt="Sekarang 4">
+                    <p>Sayang Terus</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN 5 (SUB-MENU 3): STICKY NOTES KAPSUL WAKTU -->
+        <div class="page-slide memory-page" id="slide-5">
+            <h2 class="section-title">Papan Harapan 💌</h2>
+            <div class="kapsul-container">
+                <div class="capsule-box" id="form-harapan">
+                    <h3>Ketik Harapanmu Di Sini!</h3>
+                    <p>Tulis satu doa atau harapan terbaikmu untuk masa depan hubungan kita berdua ya sayang...</p>
+                    <textarea id="pesan-harapan" class="capsule-textarea"
+                        placeholder="Contoh: Semoga kita bisa liburan ke Bali tahun depan..."></textarea>
+                    <button class="btn-tempel" onclick="tempelKertas()">Tempel Harapanku ✨</button>
+                </div>
+
+                <div class="hasil-container" id="hasil-container">
+                    <div class="sticky-note-result" id="kertas-tertempel">
+                        <p id="teks-kertas-hasil"></p>
+                        <div class="sticky-signature">- Kesayanganmu ❤️</div>
+                    </div>
+                    <button class="btn-download" onclick="downloadStickyNote()">📥 Simpan Kenangan Ini</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN 6 (SUB-MENU 4): SURAT CINTA (NOTES) -->
+        <div class="page-slide memory-page" id="slide-6">
+            <h2 class="section-title">Sebaris Surat Cinta</h2>
+            <div class="love-letter-box">
+                <h3>Teruntuk Kesayanganku,</h3>
+                <p>Selamat hari jadi yang ketiga sayang. Tiga tahun ini adalah 1.095 hari yang penuh dengan warna, tawa,
+                    dan rasa syukur karena memilikimu.</p>
+                <p>Terima kasih sudah bertahan, saling mengerti, dan menjadi rumah tempatku pulang. Aku mencintaimu
+                    lebih dari kata-kata yang bisa kutuliskan di sini.</p>
+                <p><strong>- Dari aku yang selalu mencintaimu.</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL POP-UP REAKSI SANDI -->
+    <div class="reaction-overlay" id="reaction-overlay">
+        <div class="reaction-popup">
+            <img id="reaction-img" src="" alt="Reaksi">
+            <p id="reaction-text"></p>
+        </div>
+    </div>
+
+    <script>
+        const bgMusic = document.getElementById('bg-music');
+
+        // --- SISTEM SANDI ---
+        const SANDI_BENAR = "150923";
+        let sandiInput = "";
+        const maxDigit = SANDI_BENAR.length;
+
+        function bukaSurat() {
+            const wrapper = document.getElementById('surat-wrapper');
+            const petunjuk = document.getElementById('petunjuk-klik');
+            wrapper.classList.add('opened');
+            petunjuk.style.display = 'none';
+            wrapper.onclick = null;
+        }
+
+        function tekanAngka(angka) {
+            if (sandiInput.length < maxDigit) {
+                sandiInput += angka;
+                perbaruiLayar();
+            }
+        }
+
+        function hapusAngka() { sandiInput = ""; perbaruiLayar(); }
+
+        function perbaruiLayar() {
+            const layar = document.getElementById('layar-sandi');
+            layar.innerText = sandiInput === "" ? "_ ".repeat(maxDigit).trim() : sandiInput;
+        }
+
+        function cekSandi() {
+            const kotakInput = document.getElementById('input-sandi-container');
+            const reactionOverlay = document.getElementById('reaction-overlay');
+            const reactionImg = document.getElementById('reaction-img');
+            const reactionText = document.getElementById('reaction-text');
+
+            if (sandiInput === SANDI_BENAR) {
+                reactionImg.src = "pict/senang.png";
+                reactionText.innerHTML = "🥰 Yeayy Sandi Benar! 💕";
+                reactionText.style.color = "#9B1B30";
+                reactionOverlay.style.display = 'flex';
+
+                setTimeout(() => {
+                    reactionOverlay.style.display = 'none';
+                    goToSlide(1); // Pergi ke Menu Pilih Lagu
+                }, 2000);
+
+            } else {
+                reactionImg.src = "pict/ngambek.png";
+                reactionText.innerHTML = "😤 Salahhh! Lupa ya?! 💢";
+                reactionText.style.color = "#5A111B";
+
+                kotakInput.classList.add('shake');
+                reactionOverlay.style.display = 'flex';
+
+                setTimeout(() => {
+                    kotakInput.classList.remove('shake');
+                    reactionOverlay.style.display = 'none';
+                    hapusAngka();
+                }, 2000);
+            }
+        }
+
+        // --- FUNGSI PILIH LAGU (Langsung ke Dashboard Menu) ---
+        function pilihLagu(namaFileLagu) {
+            bgMusic.src = namaFileLagu;
+            bgMusic.play();
+            goToSlide(2); // Menuju ke Dashboard 4 Menu
+        }
+
+        // --- FUNGSI TEMPEL & DOWNLOAD KERTAS HARAPAN ---
+        function tempelKertas() {
+            const inputHarapan = document.getElementById('pesan-harapan').value;
+            if (inputHarapan.trim() === "") { alert("Tuliskan sesuatu dulu ya sayang! ❤️"); return; }
+
+            const formKotak = document.getElementById('form-harapan');
+            const hasilContainer = document.getElementById('hasil-container');
+            const teksHasil = document.getElementById('teks-kertas-hasil');
+
+            formKotak.style.opacity = '0';
+            setTimeout(() => {
+                formKotak.style.display = 'none';
+                teksHasil.innerText = '"' + inputHarapan + '"';
+                hasilContainer.style.display = 'flex';
+            }, 300);
+        }
+
+        function downloadStickyNote() {
+            const nodeKertas = document.getElementById('kertas-tertempel');
+            html2canvas(nodeKertas, { backgroundColor: null, scale: 2 }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = 'Harapan-Cinta-Kita.png';
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }
+
+        // --- SISTEM NAVIGASI ---
+        // Slide 0-2 tetap menggunakan sistem geser.
+        // Slide 3-6 dibuka dengan animasi keluar langsung dari kartu
+        // yang diklik pada "Kenangan Kita".
+        let currentPage = 0;
+        let activeMemory = null;
+        let activeMenuItem = null;
+
+        const slides = document.querySelectorAll('.page-slide');
+        const memoryMenu = document.getElementById('slide-2');
+        const btnBackMenu = document.getElementById('back-menu-btn');
+
+        function goToSlide(index) {
+            // Jika sedang membuka kenangan, tutup dahulu.
+            if (activeMemory !== null) {
+                closeMemory(false);
+            }
+
+            currentPage = index;
+
+            slides.forEach((slide, i) => {
+                // Halaman kenangan tidak ikut slider utama.
+                if (slide.classList.contains('memory-page')) {
+                    slide.classList.remove('memory-open');
+                    slide.style.transformOrigin = '50% 50%';
+                    return;
+                }
+
+                if (i === index) {
+                    slide.style.transform = 'translateX(0)';
+                } else if (i < index) {
+                    slide.style.transform = 'translateX(-100vw)';
+                } else {
+                    slide.style.transform = 'translateX(100vw)';
+                }
+            });
+
+            btnBackMenu.style.display = 'none';
+            memoryMenu.classList.remove('memory-menu-hidden');
+        }
+
+        function openMemory(index, menuItem) {
+            const target = document.getElementById('slide-' + index);
+            if (!target || !menuItem) return;
+
+            // Tutup halaman kenangan lain jika ada.
+            if (activeMemory !== null && activeMemory !== index) {
+                closeMemory(false);
+            }
+
+            currentPage = index;
+            activeMemory = index;
+            activeMenuItem = menuItem;
+
+            // Titik tengah kartu menjadi titik asal animasi.
+            const rect = menuItem.getBoundingClientRect();
+            const centerX = rect.left + (rect.width / 2);
+            const centerY = rect.top + (rect.height / 2);
+
+            target.style.transformOrigin = `${centerX}px ${centerY}px`;
+
+            // Buka halaman dari kartu yang diklik.
+            target.classList.add('memory-open');
+
+            // Beri penekanan pada kartu sumber.
+            memoryMenu.classList.add('memory-menu-hidden');
+            menuItem.classList.add('memory-selected');
+
+            // Tampilkan tombol kembali.
+            btnBackMenu.style.display = 'block';
+
+            // Kembalikan scroll halaman ke atas.
+            target.scrollTop = 0;
+        }
+
+        function closeMemory(animate = true) {
+            if (activeMemory === null) {
+                goToSlide(2);
+                return;
+            }
+
+            const target = document.getElementById('slide-' + activeMemory);
+
+            if (target) {
+                // Saat kembali, halaman mengecil menuju kartu yang tadi diklik.
+                if (animate && activeMenuItem) {
+                    const rect = activeMenuItem.getBoundingClientRect();
+                    const centerX = rect.left + (rect.width / 2);
+                    const centerY = rect.top + (rect.height / 2);
+                    target.style.transformOrigin = `${centerX}px ${centerY}px`;
+                } else {
+                    target.style.transformOrigin = '50% 50%';
+                }
+
+                target.classList.remove('memory-open');
+
+                setTimeout(() => {
+                    target.style.transformOrigin = '50% 50%';
+                }, 750);
+            }
+
+            if (activeMenuItem) {
+                activeMenuItem.classList.remove('memory-selected');
+            }
+
+            memoryMenu.classList.remove('memory-menu-hidden');
+            btnBackMenu.style.display = 'none';
+
+            activeMemory = null;
+            activeMenuItem = null;
+            currentPage = 2;
+        }
+
+        // Inisialisasi posisi layar pertama kali dibuka.
+        goToSlide(0);
+
+    </script>
+</body>
+
+</html>
