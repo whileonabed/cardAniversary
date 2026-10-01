@@ -82,6 +82,11 @@
             display: none;
         }
 
+        /* During first paint, place slides without animating them across the screen. */
+        body:not(.app-ready) .page-slide {
+            transition: none !important;
+        }
+
         h1,
         h2,
         h3 {
@@ -615,12 +620,23 @@
 
             /* Pastikan panel benar-benar menutup layer di bawahnya */
             isolation: isolate;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
+            justify-content: flex-start;
+            padding-top: max(8vh, 36px);
+            padding-bottom: calc(110px + env(safe-area-inset-bottom));
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
+            scrollbar-width: none;
 
             transition:
                 transform 0.72s cubic-bezier(0.16, 1, 0.3, 1),
                 opacity 0.35s ease,
                 visibility 0s linear 0.72s;
+        }
+
+        .memory-page::-webkit-scrollbar {
+            display: none;
         }
 
         .memory-page.memory-open {
@@ -683,10 +699,29 @@
         .photobooth-container {
             display: flex;
             flex-direction: row;
+            flex-wrap: wrap;
             justify-content: center;
             align-items: center;
             gap: 20px;
+            width: 100%;
             max-width: 900px;
+            flex: 0 0 auto;
+        }
+
+        .memory-love-note {
+            width: min(780px, 100%);
+            margin: 18px auto 10px;
+            padding: 16px 20px;
+            border: 1px solid rgba(216, 163, 77, 0.75);
+            border-radius: 16px;
+            background: rgba(255, 248, 232, 0.94);
+            color: #5A111B;
+            font-family: 'Lora', serif;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            text-align: center;
+            box-shadow: 0 5px 18px rgba(90, 17, 27, 0.10);
+            flex: 0 0 auto;
         }
 
         .photobooth {
@@ -1047,6 +1082,21 @@
                 padding-right: 14px;
             }
 
+            .memory-page {
+                padding-top: max(6vh, 24px);
+            }
+
+            .photobooth-container {
+                flex-direction: column;
+                gap: 14px;
+            }
+
+            .memory-love-note {
+                font-size: 0.96rem;
+                line-height: 1.7;
+                padding: 14px 16px;
+            }
+
             .nav-btn {
                 width: 50px;
                 height: 50px;
@@ -1309,6 +1359,10 @@
                     <div class="caption">Gemesin!</div>
                 </div>
             </div>
+            <p class="memory-love-note">
+                Dari sekian banyak hal indah yang pernah terjadi, bertemu kamu tetap jadi favoritku.
+                Terima kasih sudah hadir dan membuat cerita sederhana kita terasa istimewa. ❤️
+            </p>
         </div>
 
         <!-- HALAMAN 4 (SUB-MENU 2): POLAROID -->
@@ -1604,8 +1658,11 @@
             currentPage = 2;
         }
 
-        // Inisialisasi posisi layar pertama kali dibuka.
+        // Inisialisasi posisi tanpa animasi lintas layar, lalu aktifkan transisi untuk interaksi berikutnya.
         goToSlide(0);
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => document.body.classList.add('app-ready'));
+        });
 
     </script>
 </body>
