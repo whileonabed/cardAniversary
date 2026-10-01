@@ -257,7 +257,28 @@
         .surat-wrapper.opened .envelope-paper {
             transform: translateY(-210px);
             height: 380px;
-            z-index: 4;
+            z-index: 12;
+            overflow: visible;
+        }
+
+        /* Keypad must remain above the decorative envelope pocket on touch screens. */
+        .surat-wrapper.opened #input-sandi-container {
+            position: relative;
+            z-index: 13;
+            pointer-events: auto;
+        }
+
+        .surat-wrapper.opened .keypad-grid,
+        .surat-wrapper.opened .keypad-btn {
+            position: relative;
+            z-index: 14;
+            pointer-events: auto;
+            touch-action: manipulation;
+        }
+
+        .surat-wrapper.opened .envelope-pocket {
+            z-index: 5;
+            pointer-events: none;
         }
 
         .petunjuk-klik {
@@ -319,7 +340,7 @@
 
         .keypad-btn {
             position: relative;
-            z-index: 9;
+            z-index: 14;
             touch-action: manipulation;
             padding: 7px;
             font-size: 1rem;
@@ -1095,7 +1116,23 @@
 
             .surat-wrapper.opened .envelope-paper {
                 transform: translateY(-165px);
-                height: 350px;
+                height: 370px;
+                z-index: 12;
+                overflow: visible;
+            }
+
+            .surat-wrapper.opened #input-sandi-container,
+            .surat-wrapper.opened .keypad-grid,
+            .surat-wrapper.opened .keypad-btn {
+                position: relative;
+                z-index: 14;
+                pointer-events: auto;
+                touch-action: manipulation;
+            }
+
+            .surat-wrapper.opened .envelope-pocket {
+                z-index: 5;
+                pointer-events: none;
             }
 
             .keypad-btn {
