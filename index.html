@@ -82,6 +82,31 @@
             display: none;
         }
 
+        /*
+         * Halaman yang isinya lebih tinggi dari layar harus dimulai dari atas.
+         * Jika tetap memakai justify-content:center, flex container yang overflow
+         * dapat membuat bagian atas konten berada di luar area scroll pada HP.
+         */
+        #slide-1,
+        #slide-2 {
+            justify-content: flex-start;
+            align-items: center;
+            padding-top: max(28px, env(safe-area-inset-top));
+            padding-bottom: calc(105px + env(safe-area-inset-bottom));
+            gap: 18px;
+        }
+
+        #slide-1>*,
+        #slide-2>* {
+            flex-shrink: 0;
+        }
+
+        #slide-1 .music-menu,
+        #slide-2 .menu-grid {
+            flex: 0 0 auto;
+            margin-bottom: 20px;
+        }
+
         /* During first paint, place slides without animating them across the screen. */
         body:not(.app-ready) .page-slide {
             transition: none !important;
@@ -613,10 +638,8 @@
             transform: scale(0.08);
             transform-origin: 50% 50%;
 
-            /* Background solid agar menu di belakang tidak terlihat */
-            background:
-                linear-gradient(rgba(255, 244, 220, 0.98), rgba(155, 27, 48, 0.94)),
-                url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+            /* Latar halaman kenangan polos, tanpa gradasi atau gambar latar. */
+            background: #FFF4DC;
 
             /* Pastikan panel benar-benar menutup layer di bawahnya */
             isolation: isolate;
@@ -654,7 +677,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: rgba(255, 244, 220, 0.97);
+            background: #FFF4DC;
             z-index: -1;
             pointer-events: none;
         }
@@ -665,6 +688,7 @@
         .memory-page.memory-open .kapsul-container,
         .memory-page.memory-open .love-letter-box {
             animation: memoryContentIn 0.65s ease 0.12s both;
+            flex-shrink: 0;
         }
 
         @keyframes memoryContentIn {
@@ -1077,6 +1101,24 @@
 
         /* RESPONSIF HP */
         @media (max-width: 600px) {
+
+            #slide-1,
+            #slide-2 {
+                padding-top: max(22px, env(safe-area-inset-top));
+                padding-bottom: calc(105px + env(safe-area-inset-bottom));
+                gap: 14px;
+            }
+
+            #slide-2 .section-title {
+                margin-top: 10px;
+                margin-bottom: 8px;
+            }
+
+            #slide-2 .menu-grid {
+                width: min(100%, 500px);
+                gap: 14px;
+            }
+
             .page-slide {
                 padding-left: 14px;
                 padding-right: 14px;
